@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Calendar from './components/Calendar.vue';
 import Timeline from './components/Timeline.vue';
-
+import WriteSection from './components/WriteSection.vue';
 
 onMounted(() => {
   if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
@@ -25,10 +25,11 @@ useHead({
 <template>
   <div class="flex flex-wrap divide-x divide-blck-50 min-h-screen">
     <main class="w-[100%] md:w-[40%] lg:w-[30%] p-4 max-h-screen overflow-y-auto">
-      <Timeline/>
+      <WriteSection/>
+      <Timeline />
     </main>
     <aside class="flex-1 hidden md:flex items-center justify-center p-10 overflow-hidden max-h-screen">
-      <Calendar/>
+      <Calendar />
     </aside>
   </div>
 </template>

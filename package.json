@@ -17,6 +17,7 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@headlessui/vue": "latest"
+    "@headlessui/vue": "latest",
+    "tinygesture": "^2.0.0"
   }
 }
