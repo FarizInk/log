@@ -16,6 +16,10 @@ const props = defineProps({
     type: String,
     default: null,
   },
+  header: {
+    type: Boolean,
+    default: true,
+  },
   footer: {
     type: Boolean,
     default: true,
@@ -88,15 +92,14 @@ function submitModal() {
             leave-to="opacity-0 scale-95">
             <DialogPanel
               :class="[width, 'w-full transform overflow-hidden rounded-2xl bg-black p-6 text-left align-middle shadow-xl transition-all border border-blck-100']">
-              <slot name="header">
+              <slot name="header" v-if="header">
+                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-white mb-2" v-if="title">
+                  {{ title }}
+                </DialogTitle>
               </slot>
-              
-              <DialogTitle as="h3" class="text-lg font-medium leading-6 text-white" v-if="title">
-                {{ title }}
-              </DialogTitle>
-              
+
               <slot />
-              
+
               <slot name="footer" v-if="footer">
                 <div class="mt-4 flex gap-2 justify-end">
                   <button type="button" class="btn-simple btn-sm" @click="closeModal" v-if="cancelBtn">
