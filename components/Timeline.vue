@@ -1,58 +1,51 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Listbox, ListboxButton, ListboxLabel, ListboxOption, ListboxOptions } from '@headlessui/vue'
+import { timelinePayload, getTimeline, isTimelineLoading } from '@/store'
 
-const activity = [
-  { id: 1, type: 'created', person: { name: 'Chelsea Hagon' }, date: '7d ago', dateTime: '2023-01-23T10:32' },
-  { id: 2, type: 'edited', person: { name: 'Chelsea Hagon' }, date: '6d ago', dateTime: '2023-01-23T11:03' },
-  { id: 3, type: 'sent', person: { name: 'Chelsea Hagon' }, date: '6d ago', dateTime: '2023-01-23T11:24' },
-  {
-    id: 4,
-    type: 'commented',
-    person: {
-      name: 'Chelsea Hagon',
-      imageUrl:
-        'https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-    },
-    comment: 'Called client, they reassured me the invoice would be paid by the 25th.',
-    date: '3d ago',
-    dateTime: '2023-01-23T15:56',
-  },
-  { id: 5, type: 'viewed', person: { name: 'Alex Curren' }, date: '2d ago', dateTime: '2023-01-24T09:12' },
-]
+onMounted(async () => getTimeline())
+
+const generateTime = (unixTime) => {
+  const date = new Date(unixTime)
+  return date.getHours() + ':' + date.getMinutes();
+}
 </script>
 
 <template>
   <ul role="list" class="space-y-6">
-    <li v-for="(activityItem, activityItemIdx) in activity" :key="activityItem.id" class="relative flex gap-x-4">
+    <li v-for="(item, index) in timelinePayload" :key="index" class="relative flex gap-x-4" v-if="!isTimelineLoading">
       <div
-        :class="[activityItemIdx === activity.length - 1 ? 'h-6' : '-bottom-6', 'absolute left-0 top-0 flex w-6 justify-center']">
+        :class="[index === timelinePayload.length - 1 ? 'h-6' : '-bottom-6', 'absolute left-0 top-0 flex w-6 justify-center']">
         <div class="w-px bg-blck-100" />
       </div>
-      <template v-if="activityItem.type === 'commented'">
-        <img :src="activityItem.person.imageUrl" alt="" class="relative mt-3 h-6 w-6 flex-none rounded-full bg-blck-950" />
-        <div class="flex-auto rounded-md p-3 ring-1 ring-inset ring-blck-50">
-          <div class="flex justify-between gap-x-4">
-            <div class="py-0.5 text-xs leading-5 text-gray-400">
-              <span class="font-medium text-white">{{ activityItem.person.name }}</span> commented
-            </div>
-            <time :datetime="activityItem.dateTime" class="flex-none py-0.5 text-xs leading-5 text-gray-400">{{
-              activityItem.date }}</time>
+      <div class="relative flex h-6 w-6 flex-none items-center justify-center bg-black">
+        <div class="h-1.5 w-1.5 rounded-full bg-blck-950 ring-1 ring-blck-50" />
+      </div>
+      <div class="flex-auto rounded-md p-3 ring-1 ring-inset ring-blck-50">
+        <div class="flex justify-between gap-x-4">
+          <div class="py-0.5 text-xs leading-5 text-gray-400">
+            <span class="font-medium text-white">~</span> /home/projects
           </div>
-          <p class="text-sm leading-6 text-white">{{ activityItem.comment }}</p>
+          <time :datetime="item.timestamp" class="flex-none py-0.5 text-xs leading-5 text-gray-400">{{
+            generateTime(item.timestamp) }}</time>
         </div>
-      </template>
-      <template v-else>
-        <div class="relative flex h-6 w-6 flex-none items-center justify-center bg-black">
-          <div class="h-1.5 w-1.5 rounded-full bg-blck-950 ring-1 ring-blck-50" />
+        <p class="text-sm leading-6 text-white">{{ item.content }}</p>
+      </div>
+    </li>
+    <li v-else v-for="item in 7" :key="item" class="relative flex gap-x-4">
+      <div class="border border-blck-100 shadow rounded-md p-4 max-w-sm w-full mx-auto">
+        <div class="animate-pulse flex space-x-4">
+          <div class="rounded-full bg-blck-700 h-10 w-10"></div>
+          <div class="flex-1 space-y-6 py-1">
+            <div class="h-2 bg-blck-700 rounded"></div>
+            <div class="space-y-3">
+              <div class="grid grid-cols-3 gap-4">
+                <div class="h-2 bg-blck-700 rounded col-span-2"></div>
+                <div class="h-2 bg-blck-700 rounded col-span-1"></div>
+              </div>
+              <div class="h-2 bg-blck-700 rounded"></div>
+            </div>
+          </div>
         </div>
-        <p class="flex-auto py-0.5 text-xs leading-5 text-gray-400">
-          <span class="font-medium text-white">{{ activityItem.person.name }}</span> {{ activityItem.type }} the
-          invoice.
-        </p>
-        <time :datetime="activityItem.dateTime" class="flex-none py-0.5 text-xs leading-5 text-gray-400">{{
-          activityItem.date }}</time>
-      </template>
+      </div>
     </li>
   </ul>
 </template>

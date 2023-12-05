@@ -1,10 +1,15 @@
 <script setup lang="ts">
-import Calendar from './components/Calendar.vue';
-import Timeline from './components/Timeline.vue';
-import WriteSection from './components/WriteSection.vue';
+import Timeline from '@/components/Timeline.vue';
+import WriteSection from '@/components/WriteSection.vue';
 import tinykeys from "@/utils/tinykeys";
+import axios from 'axios'
+// import { token } from '@/store'
+import { ref } from 'vue'
+import { useStorage } from '@vueuse/core'
+import CalendarIcon from '@/icons/CalendarIcon.vue'
+import { globalDate } from '@/store';
 
-onMounted(() => {
+onMounted(async () => {
   if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark')
   } else {
@@ -16,7 +21,7 @@ onMounted(() => {
 
   // trigger modal on key shortcut
   tinykeys(window, {
-    "$mod+KeyD": event => {
+    "$mod+Shift+KeyF": event => {
       event.preventDefault()
       modalSignIn.value = true
     },
@@ -30,23 +35,60 @@ useHead({
   }
 })
 
-
 const modalSignIn = ref(false)
+const modalCalendar = ref(false)
 const password = ref(null);
+const token = useStorage('token', null)
+
+const submitPassword = async () => {
+  const { data } = await axios.post('/api/login', {
+    password: password.value
+  })
+
+  if (data.token && password.value !== null) {
+    token.value = data.token
+  } else {
+    token.value = null
+  }
+
+  password.value = null
+  modalSignIn.value = false
+}
+
+const formatDate = (date) => new Date(date)
+  .toLocaleDateString("en-US", {
+    // weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
 </script>
 
 <template>
-  <div class="flex flex-wrap divide-x divide-blck-50 min-h-screen">
-    <main class="w-[100%] md:w-[40%] lg:w-[30%] p-4 max-h-screen overflow-y-auto">
-      <WriteSection />
-      <Timeline />
-    </main>
-    <aside class="flex-1 hidden md:flex items-center justify-center p-10 overflow-hidden max-h-screen">
-      <Calendar />
-    </aside>
-  </div>
-
+  <Toaster theme="dark" position="top-center" richColors />
   <Modal :isOpen="modalSignIn" :footer="false" :header="false" title="Password" @close="() => modalSignIn = false">
-    <input type="text" class="input input-sm" v-model="password" autofocus>
+    <form @submit.prevent="submitPassword">
+      <input type="password" class="input input-sm" v-model="password" autofocus>
+    </form>
   </Modal>
+
+
+  <Modal :isOpen="modalCalendar" :footer="false" :header="false" title="Password" @close="() => modalCalendar = false">
+    <CalendarMini />
+  </Modal>
+
+  <div class="flex items-center justify-center text-white">
+    <div class="container max-w-sm min-h-screen">
+      <div class="sticky top-0 z-10 bg-black px-4 py-3">
+        <div class="text-center flex items-center justify-center gap-2 mb-3">
+          <CalendarIcon class="h-6 text-white cursor-pointer" @click="() => modalCalendar = true" />
+          <span>{{ formatDate(globalDate) }}</span>
+        </div>
+        <WriteSection v-if="token !== null" />
+      </div>
+      <div class="px-4">
+        <Timeline />
+      </div>
+    </div>
+  </div>
 </template>

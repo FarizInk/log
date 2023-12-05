@@ -79,7 +79,7 @@ function submitModal() {
 
 <template>
   <TransitionRoot appear :show="isOpen" as="template">
-    <Dialog as="div" @close="() => backdropClose ? closeModal() : null" class="relative z-10">
+    <Dialog as="div" @close="() => backdropClose ? closeModal() : null" class="relative z-50">
       <TransitionChild as="template" enter="duration-300 ease-out" enter-from="opacity-0" enter-to="opacity-100"
         leave="duration-200 ease-in" leave-from="opacity-100" leave-to="opacity-0">
         <div class="fixed inset-0 bg-black bg-opacity-25 backdrop-blur-sm" />
@@ -102,7 +102,7 @@ function submitModal() {
 
               <slot name="footer" v-if="footer">
                 <div class="mt-4 flex gap-2 justify-end">
-                  <button type="button" class="btn-simple btn-sm" @click="closeModal" v-if="cancelBtn">
+                  <button type="button" class="btn simple btn-sm" @click="closeModal" v-if="cancelBtn">
                     {{ cancelText }}
                   </button>
 

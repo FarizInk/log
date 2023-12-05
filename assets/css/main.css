@@ -8,7 +8,7 @@
         @apply inline-flex items-center justify-center border border-transparent font-medium rounded shadow-sm transition duration-150 ease-in-out active:scale-95
     }
 
-    .btn-simple {
+    .btn.simple {
         @apply inline-flex items-center justify-center border border-gray-300 shadow-sm font-medium rounded text-gray-700 bg-white hover:bg-gray-50 dark:text-white dark:bg-gray-900 dark:hover:bg-gray-800 dark:border-gray-700 focus:outline-none transition duration-150 ease-in-out active:scale-95
     }
 
