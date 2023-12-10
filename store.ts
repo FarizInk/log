@@ -14,6 +14,8 @@ export const getTimeline = async () => {
     },
   });
 
+  console.log(data);
+
   timelinePayload.value = data;
   isTimelineLoading.value = false;
 };

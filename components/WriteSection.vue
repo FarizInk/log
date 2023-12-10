@@ -57,7 +57,7 @@ const submit = async () => {
 
 <template>
   <form @submit.prevent="submit">
-    <input id="input-bcd" type="text" class="input input-sm" v-model="logText" autofocus :disabled="isLoading" placeholder="bacod here...">
+    <input id="input-bcd" type="text" class="input input-sm" v-model="logText" autofocus :disabled="isLoading" placeholder="bacod here..." autocomplete="off">
   </form>
 </template>
 

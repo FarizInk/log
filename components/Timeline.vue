@@ -5,7 +5,7 @@ onMounted(async () => getTimeline())
 
 const generateTime = (unixTime) => {
   const date = new Date(unixTime)
-  return date.getHours() + ':' + date.getMinutes();
+  return ('0' + date.getHours()).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2);
 }
 </script>
 
@@ -22,7 +22,7 @@ const generateTime = (unixTime) => {
       <div class="flex-auto rounded-md p-3 ring-1 ring-inset ring-blck-50">
         <div class="flex justify-between gap-x-4">
           <div class="py-0.5 text-xs leading-5 text-gray-400">
-            <span class="font-medium text-white">~</span> /home/projects
+            <span class="font-medium text-white">~</span> /bacod
           </div>
           <time :datetime="item.timestamp" class="flex-none py-0.5 text-xs leading-5 text-gray-400">{{
             generateTime(item.timestamp) }}</time>

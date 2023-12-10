@@ -91,17 +91,19 @@ function submitModal() {
             enter-to="opacity-100 scale-100" leave="duration-200 ease-in" leave-from="opacity-100 scale-100"
             leave-to="opacity-0 scale-95">
             <DialogPanel
-              :class="[width, 'w-full transform overflow-hidden rounded-2xl bg-black p-6 text-left align-middle shadow-xl transition-all border border-blck-100']">
+              :class="[width, 'w-full transform overflow-hidden rounded-2xl bg-black text-left align-middle shadow-xl transition-all border border-blck-100']">
               <slot name="header" v-if="header">
-                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-white mb-2" v-if="title">
+                <DialogTitle as="h3" class="text-lg font-medium leading-6 text-white mb-2 p-6" v-if="title">
                   {{ title }}
                 </DialogTitle>
               </slot>
 
-              <slot />
+              <div class="p-6">
+                <slot />
+              </div>
 
               <slot name="footer" v-if="footer">
-                <div class="mt-4 flex gap-2 justify-end">
+                <div class="mt-4 flex gap-2 justify-end p-6">
                   <button type="button" class="btn simple btn-sm" @click="closeModal" v-if="cancelBtn">
                     {{ cancelText }}
                   </button>
