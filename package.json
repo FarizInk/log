@@ -1,5 +1,6 @@
 {
   "name": "nuxt-app",
+  "type": "module",
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "@tailwindcss/forms": "^0.5.7",
@@ -23,6 +24,7 @@
     "@headlessui/vue": "latest",
     "axios": "^1.6.2",
     "bcrypt": "^5.1.1",
+    "puppeteer": "^21.7.0",
     "tinygesture": "^2.0.0",
     "vue-sonner": "^1.0.2"
   }
